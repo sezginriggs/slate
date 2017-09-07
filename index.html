@@ -219,6 +219,9 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#structure" class="toc-h1 toc-link" data-title="Structure">Structure</a>
+          </li>
+          <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
@@ -228,10 +231,22 @@
                     <a href="#check-for-profanity" class="toc-h2 toc-link" data-title="Profanity">Check for Profanity</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-kitten" class="toc-h2 toc-link" data-title="Profanity">Get a Specific Kitten</a>
+                    <a href="#get-whitelist" class="toc-h2 toc-link" data-title="Profanity">Get Whitelist</a>
                   </li>
                   <li>
-                    <a href="#delete-a-specific-kitten" class="toc-h2 toc-link" data-title="Profanity">Delete a Specific Kitten</a>
+                    <a href="#add-word-to-whitelist" class="toc-h2 toc-link" data-title="Profanity">Add Word to Whitelist</a>
+                  </li>
+                  <li>
+                    <a href="#remove-word-from-whitelist" class="toc-h2 toc-link" data-title="Profanity">Remove Word from Whitelist</a>
+                  </li>
+                  <li>
+                    <a href="#get-blacklist" class="toc-h2 toc-link" data-title="Profanity">Get Blacklist</a>
+                  </li>
+                  <li>
+                    <a href="#add-word-to-blacklist" class="toc-h2 toc-link" data-title="Profanity">Add Word to Blacklist</a>
+                  </li>
+                  <li>
+                    <a href="#remove-word-from-blacklist" class="toc-h2 toc-link" data-title="Profanity">Remove Word from Blacklist</a>
                   </li>
               </ul>
           </li>
@@ -259,6 +274,13 @@
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
 <p>Welcome to the ModerationPipe API! You can use our API to access ModerationPipe API endpoints, which can check for profanity and provide access to custom whitelist and blacklist.</p>
+<h1 id='structure'>Structure</h1>
+<p>Our API is designed to be as simple to use as possible. We use these top-level members for all services.</p>
+
+<ul>
+<li><code>data</code> contains the main result data</li>
+<li><code>errors</code> shows errors with descriptions. Also please check <a href="#errors">errors</a> section for HTTP response codes.</li>
+</ul>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
 <p>To authorize, use this code:</p>
@@ -286,28 +308,55 @@ You must replace <code>your-api-key-here</code> with your personal API key.
 <aside class="warning">
 Be careful when sharing API keys. Don't publish them in public code repositories or add them to client-side API calls.
 </aside>
-<h1 id='profanity'>Profanity</h1><h2 id='check-for-profanity'>Check for Profanity</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/check"</span>
-  -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span>
-</code></pre><pre class="highlight http tab-http"><code><span class="err">POST http://api.moderationpipe.com/test
-</span></code></pre>
+<h1 id='profanity'>Profanity</h1><h2 id='check-for-profanity'>Check for Profanity</h2><pre class="highlight shell tab-shell"><code>
+curl https://api.moderationpipe.com/v1/profanity/check <span class="se">\</span>
+   -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span> <span class="se">\</span>
+   -d <span class="nv">text</span><span class="o">=</span><span class="s2">"Your text here"</span> <span class="se">\</span>
+   -d <span class="nv">language</span><span class="o">=</span>en <span class="se">\</span>
+   -d <span class="nv">content_relation</span><span class="o">=</span>1
+
+</code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="w">
+</span><span class="p">{</span><span class="w">
   </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-   </span><span class="s2">"found"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-   </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-   </span><span class="s2">"words"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-   </span><span class="s2">"language_auto_detection"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-   </span><span class="s2">"language_used"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tr"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+     </span><span class="s2">"found"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"words"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some-bad-word-here"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"profanity"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"content_relation"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some-another-bad-word-here"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"profanity"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"content_relation"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"casino"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"content_related"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"content_relation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gambling"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"keylogger"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"content_related"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"content_relation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hacking"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+     </span><span class="p">],</span><span class="w">
+     </span><span class="s2">"language_auto_detection"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+     </span><span class="s2">"language_used"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
+
 </span></code></pre>
-<p>This endpoint retrieves all kittens.</p>
+<p>This endpoint checks text for profanity and returns list of found words and related information.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST http://api.moderationpipe.com/v1/profanity/check</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
+<p><code>POST https://api.moderationpipe.com/v1/profanity/check</code></p>
+<h3 id='parameters'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -341,68 +390,354 @@ Be careful when sharing API keys. Don't publish them in public code repositories
 <td>You can use this parameter with your API key instead of providing with Authorization header.</td>
 </tr>
 </tbody></table>
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<h3 id='result-attributes'>Result Attributes</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>found</td>
+<td><code>true</code> if profanity word(s) found</td>
+</tr>
+<tr>
+<td>count</td>
+<td>number of found profanity words</td>
+</tr>
+<tr>
+<td>words</td>
+<td>array of objects for found words. each object includes following values<br>* <code>word</code> for found word <br>* <code>type</code> for detection type<br>* <code>content_relation</code> for related content if <em>content_relation</em> parameter was set to 1</td>
+</tr>
+<tr>
+<td>language_auto_detection</td>
+<td> <code>true</code> if language parameter was empty or unsupported language and language detected automatically by the service.</td>
+</tr>
+<tr>
+<td>language_used</td>
+<td>2-letter language code of used language for detection.</td>
+</tr>
+</tbody></table>
+<h2 id='get-whitelist'>Get Whitelist</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/whitelist"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myfirstword"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysecondword"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mythirdword"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+ </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+</span></code></pre>
+<p>This endpoint retrieves whitelist for user account.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
+<p><code>GET https://api.moderationpipe.com/v1/profanity/whitelist</code></p>
+<h3 id='parameters-2'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>Default</th>
+<th>Required</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
+<td>api_key</td>
+<td> </td>
+<td>yes if no Authorization header provided</td>
+<td>You can use this parameter with your API key instead of providing with Authorization header.</td>
 </tr>
 </tbody></table>
-<h2 id='delete-a-specific-kitten'>Delete a Specific Kitten</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -X DELETE
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<h3 id='result-attributes-2'>Result Attributes</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td>specified word</td>
+</tr>
+<tr>
+<td>deepsearch</td>
+<td><code>true</code> if search in substring has been prefered</td>
+</tr>
+</tbody></table>
+<h2 id='add-word-to-whitelist'>Add Word to Whitelist</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/whitelist"</span> <span class="se">\</span>
+   -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span> <span class="se">\</span>
+   -d <span class="nv">word</span><span class="o">=</span><span class="s2">"mysampleword"</span> <span class="se">\</span>
+   -d <span class="nv">deepsearch</span><span class="o">=</span>1
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"deleted"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">":("</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysampleword"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
+
+
 </span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
+<p>This endpoint adds words to whitelist of associated user account.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
-<p><code>DELETE http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
+<p><code>POST https://api.moderationpipe.com/v1/profanity/whitelist</code></p>
+<h3 id='parameters-3'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>Default</th>
+<th>Required</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to delete</td>
+<td>word</td>
+<td></td>
+<td>yes</td>
+<td>word to be added to whitelist.</td>
+</tr>
+<tr>
+<td>deepsearch</td>
+<td>0</td>
+<td>no</td>
+<td><code>1</code> for searching word in substrings.</td>
+</tr>
+<tr>
+<td>api_key</td>
+<td> </td>
+<td>yes if no Authorization header provided</td>
+<td>You can use this parameter with your API key instead of providing with Authorization header.</td>
 </tr>
 </tbody></table>
+<h3 id='result-attributes-3'>Result Attributes</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td>specified word</td>
+</tr>
+<tr>
+<td>deepsearch</td>
+<td><code>true</code> if search in substring has been prefered</td>
+</tr>
+</tbody></table>
+<h2 id='remove-word-from-whitelist'>Remove Word from Whitelist</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/whitelist"</span> <span class="se">\</span>
+  -X DELETE <span class="se">\</span>
+  -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span> <span class="se">\</span>
+  -d <span class="nv">word</span><span class="o">=</span><span class="s2">"yourwordhere"</span>
+</code></pre>
+<blockquote>
+<p>The above command won&#39;t return any JSON response but will return following HTTP status:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>204 No Content
+</code></pre>
+<p>This endpoint removes word from whitelist</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>DELETE https://api.moderationpipe.com/v1/profanity/whitelist</code></p>
+<h3 id='parameters-4'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td></td>
+<td>yes</td>
+<td>word to be removed from whitelist.</td>
+</tr>
+<tr>
+<td>api_key</td>
+<td> </td>
+<td>yes if no Authorization header provided</td>
+<td>You can use this parameter with your API key instead of providing with Authorization header.</td>
+</tr>
+</tbody></table>
+
+<!--------------------------------------------- BLACKLIST ------------------------------------------->
+<h2 id='get-blacklist'>Get Blacklist</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/blacklist"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myfirstword"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysecondword"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mythirdword"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+ </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<p>This endpoint retrieves blacklist for user account.</p>
+<h3 id='http-request-5'>HTTP Request</h3>
+<p><code>GET https://api.moderationpipe.com/v1/profanity/blacklist</code></p>
+<h3 id='parameters-5'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>api_key</td>
+<td> </td>
+<td>yes if no Authorization header provided</td>
+<td>You can use this parameter with your API key instead of providing with Authorization header.</td>
+</tr>
+</tbody></table>
+<h3 id='result-attributes-4'>Result Attributes</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td>specified word</td>
+</tr>
+<tr>
+<td>deepsearch</td>
+<td><code>true</code> if search in substring has been prefered</td>
+</tr>
+</tbody></table>
+<h2 id='add-word-to-blacklist'>Add Word to Blacklist</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/blacklist"</span> <span class="se">\</span>
+   -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span> <span class="se">\</span>
+   -d <span class="nv">word</span><span class="o">=</span><span class="s2">"mysampleword"</span> <span class="se">\</span>
+   -d <span class="nv">deepsearch</span><span class="o">=</span>1
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"word"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysampleword"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deepsearch"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+
+</span></code></pre>
+<p>This endpoint adds words to blacklist of associated user account.</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>POST https://api.moderationpipe.com/v1/profanity/blacklist</code></p>
+<h3 id='parameters-6'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td></td>
+<td>yes</td>
+<td>word to be added to blacklist.</td>
+</tr>
+<tr>
+<td>deepsearch</td>
+<td>0</td>
+<td>no</td>
+<td><code>1</code> for searching word in substrings.</td>
+</tr>
+<tr>
+<td>api_key</td>
+<td> </td>
+<td>yes if no Authorization header provided</td>
+<td>You can use this parameter with your API key instead of providing with Authorization header.</td>
+</tr>
+</tbody></table>
+<h3 id='result-attributes-5'>Result Attributes</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td>specified word</td>
+</tr>
+<tr>
+<td>deepsearch</td>
+<td><code>true</code> if search in substring has been prefered</td>
+</tr>
+</tbody></table>
+<h2 id='remove-word-from-blacklist'>Remove Word from Blacklist</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.moderationpipe.com/v1/profanity/blacklist"</span> <span class="se">\</span>
+  -X DELETE <span class="se">\</span>
+  -H <span class="s2">"Authorization: ApiKey your-api-key-here"</span> <span class="se">\</span>
+  -d <span class="nv">word</span><span class="o">=</span><span class="s2">"yourwordhere"</span>
+</code></pre>
+<blockquote>
+<p>The above command won&#39;t return any JSON response but will return following HTTP status:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>204 No Content
+</code></pre>
+<p>This endpoint removes word from blacklist</p>
+<h3 id='http-request-7'>HTTP Request</h3>
+<p><code>DELETE https://api.moderationpipe.com/v1/profanity/blacklist</code></p>
+<h3 id='parameters-7'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>word</td>
+<td></td>
+<td>yes</td>
+<td>word to be removed from blacklist.</td>
+</tr>
+<tr>
+<td>api_key</td>
+<td> </td>
+<td>yes if no Authorization header provided</td>
+<td>You can use this parameter with your API key instead of providing with Authorization header.</td>
+</tr>
+</tbody></table>
+
+<!--------------------------------------------- /BLACKLIST ------------------------------------------>
 <h1 id='api-rate-limit'>API Rate limit</h1>
 <p>ModerationPipe API enforces two kinds of rate limits. Application-level throttling for protecting other users and Account-level throttling.</p>
 <h2 id='application-level-limits'>Application-level Limits</h2>
